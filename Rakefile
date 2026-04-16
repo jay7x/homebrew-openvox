@@ -93,4 +93,17 @@ namespace :brew do
 
     File.write(File.join(__dir__, 'Casks', "#{cask}.rb"), cask_content)
   end
+
+  namespace :cask do
+    desc 'Render all supported casks'
+    task :all do
+      [
+        ['agent', 8],
+        ['openbolt', 8]
+      ].each do |pkg, collection|
+        Rake::Task['brew:cask'].invoke(pkg, collection)
+        Rake::Task['brew:cask'].reenable # Allow the task to be re-invoked
+      end
+    end
+  end
 end
